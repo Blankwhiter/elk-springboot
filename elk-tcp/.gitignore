@@ -16,6 +16,8 @@
 *.iml
 *.ipr
 
+.gitignore
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
