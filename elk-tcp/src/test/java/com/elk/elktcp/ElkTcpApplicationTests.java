@@ -30,11 +30,12 @@ public class ElkTcpApplicationTests {
     private String ip;
 
     private final static Logger log = LoggerFactory.getLogger("newtest");
+
     @Test
     public void test() {
-        log.info("ip:{}的filebeat kafka logstash   测试 info 成功了！！！",ip);
-        log.warn("ip:{}的filebeat kafka logstash   测试 warn 成功了！！！",ip);
-        log.error("ip:{}的filebeat kafka logstash   测试 error 成功了！！",ip);
+        log.info("ip:{}的filebeat kafka logstash   测试 info 成功了！！！", ip);
+        log.warn("ip:{}的filebeat kafka logstash   测试 warn 成功了！！！", ip);
+        log.error("ip:{}的filebeat kafka logstash   测试 error 成功了！！", ip);
     }
 
 
@@ -46,19 +47,19 @@ public class ElkTcpApplicationTests {
     private LogService logService;
 
     @Test
-    public void testElasticSearchService(){
-        List<SearchHit<Log>>list = logService.findByMethodNameLike("test");
+    public void testElasticSearchService() {
+        List<SearchHit<Log>> list = logService.findByMethodNameLike("test");
         System.out.println(list.size());
         for (int i = 0; i < 10; i++) {
             Log log = list.get(i).getContent();
             List<String> methodName = list.get(i).getHighlightField("methodName");
-            System.out.println(log.getBeanName() +" : " + log.getMethodName());
+            System.out.println(log.getBeanName() + " : " + log.getMethodName());
         }
     }
 
 
     @Test
-    public void testElasticSearchTemplate(){
+    public void testElasticSearchTemplate() {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         NativeSearchQuery searchQuery = new NativeSearchQuery(boolQueryBuilder);
         SearchHits<Log> search = elasticsearchRestTemplate.search(searchQuery, Log.class);
@@ -69,7 +70,7 @@ public class ElkTcpApplicationTests {
     private UserDao userDao;
 
     @Test
-    public void testInsert(){
+    public void testInsert() {
         User user = new User();
         user.setId(2L);
         user.setAge(30);
@@ -77,8 +78,9 @@ public class ElkTcpApplicationTests {
         user.setUserName("黄斌龙123");
         userDao.save(user);
     }
+
     @Test
-    public void testSelect(){
+    public void testSelect() {
 //        List<SearchHit<User>> list = userDao.findByUserNameLike("黄");
 //        System.out.println(list.size());
 //

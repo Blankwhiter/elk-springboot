@@ -32,4 +32,5 @@ public interface UserDao extends ElasticsearchRepository<User,Long> {
     })
     List<SearchHit<User>> findByDescLike(String desc);
 
+
 }
