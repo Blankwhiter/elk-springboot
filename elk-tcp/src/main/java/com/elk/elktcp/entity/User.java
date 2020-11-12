@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * 标记文档
  */
-@Document(indexName = "test-use", type = "test-us")
+@Document(indexName = "test-plugin", type = "test")
 public class User implements Serializable {
 
     /**
@@ -27,7 +27,7 @@ public class User implements Serializable {
     /**
      * 设置分词
      */
-    @Field(name = "desc", type = FieldType.Text, analyzer = "ik_smart", searchAnalyzer = "ik_max_word")
+    @Field(name = "desc", type = FieldType.Text, analyzer = "pinyin", searchAnalyzer = "pinyin")
     private String desc;
 
     /**

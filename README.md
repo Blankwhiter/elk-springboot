@@ -7,6 +7,8 @@
 ```
 docker run -e ES_JAVA_OPTS="-Xms256m -Xmx256m" -d -p 9200:9200 -p 9300:9300  -e "discovery.type=single-node" -v /home/software/elasticsearch/plugins:/usr/share/elasticsearch/plugins  -v /home/software/elasticsearch/data:/usr/share/elasticsearch/data -v /home/software/elasticsearch/config/es-single.yml:/usr/share/elasticsearch/config/elasticsearch.yml --name elasticsearch-single elasticsearch:7.9.3
 ```
+注：将需要的插件下载并放置于 /home/software/elasticsearch/plugins 目录下，常用的用中文分词，已经拼音
+
 
 基于spring-boot 2.3.3版本
 ```
@@ -428,4 +430,67 @@ GET /index/type/_search
 　　- price_aggs：聚合的名称
 　　　　- avg：度量的类型，这里是求平均值
 　　　　　　- field：度量运算的字段
+```
+
+
+
+ik配置文件地址：es/plugins/ik/config目录
+```
+IKAnalyzer.cfg.xml：用来配置自定义词库
+
+main.dic：ik原生内置的中文词库，总共有27万多条，只要是这些单词，都会被分在一起
+
+quantifier.dic：放了一些单位相关的词
+
+suffix.dic：放了一些后缀
+
+surname.dic：中国的姓氏
+
+stopword.dic：英文停用词
+```
+
+自定义分词步骤：
+```
+新增一个z_SelfAdd.dic文件，在里面加上新的单词，保存为UTF-8
+然后在当前目录下的IKAnalyzer.cfg.xml配置文件中下加上<entry key="ext_dict">z_SelfAdd.dic</entry>
+将刚才命名的文件加入
+重启服务器，就生效了
+```
+
+edge_ngram是从第一个字符开始,按照步长,进行分词,适合前缀匹配场景,比如:订单号,手机号,邮政编码的检索
+ngram是从每一个字符开始,按照步长,进行分词,适合前缀中缀检索
+
+
+使用sql语句查询工具
+`https://github.com/NLPchina/elasticsearch-sql`
+离线安装：查找对应elasticsearch版本下载，放置于es的plugins的目录下
+
+使用post请求，内容json形式
+```
+http://ip:9200/_nlpcn/sql
+{
+	"sql":"select * from indexName  limit 10"
+}```
+
+```
+```
+1）条件查询
+SELECT * FROM bank WHERE age >30 AND gender = 'm'
+
+2)聚合
+select COUNT(*),SUM(age),MIN(age) as m, MAX(age),AVG(age)
+  FROM bank GROUP BY gender ORDER BY SUM(age), m DESC
+  
+3)删除
+DELETE FROM bank WHERE age >30 AND gender = 'm'
+
+4)geo地理坐标
+SELECT * FROM locations WHERE GEO_BOUNDING_BOX(fieldname,100.0,1.0,101,0.0)
+
+5)需要指定index+type
+SELECT * FROM indexName/type
+
+6)如何指定路由
+select /*! ROUTINGS(salary) */ sum(count)  from index where type="salary"
+
 ```

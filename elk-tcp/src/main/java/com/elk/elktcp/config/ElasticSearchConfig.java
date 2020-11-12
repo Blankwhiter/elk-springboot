@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- *  ElasticSearch配置
+ * ElasticSearch配置
  */
 @Configuration
 public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
@@ -25,10 +25,11 @@ public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
 
     /**
      * 高版本需声明RestHighLevelClient， ElasticsearchRestTemplate并需声明"elasticsearchOperations", "elasticsearchTemplate"
+     *
      * @return
      */
-    @Bean(name = { "elasticsearchOperations", "elasticsearchTemplate" })
-    public ElasticsearchRestTemplate elasticsearchRestTemplate(){
+    @Bean(name = {"elasticsearchOperations", "elasticsearchTemplate"})
+    public ElasticsearchRestTemplate elasticsearchRestTemplate() {
         return new ElasticsearchRestTemplate(elasticsearchClient());
     }
 
@@ -37,7 +38,7 @@ public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
     public RestHighLevelClient elasticsearchClient() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
                 .connectedTo(elasticSearchUrl)
-                .withHeaders(()->{
+                .withHeaders(() -> {
                     HttpHeaders headers = new HttpHeaders();
                     headers.add("currentTime", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                     return headers;

@@ -9,7 +9,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 import java.util.List;
 
-public interface UserDao extends ElasticsearchRepository<User,Long> {
+public interface UserDao extends ElasticsearchRepository<User, Long> {
     @Highlight(fields = {
             @HighlightField(name = "userName", parameters = @HighlightParameters(
                     preTags = "<strong>",
@@ -19,7 +19,6 @@ public interface UserDao extends ElasticsearchRepository<User,Long> {
 
     })
     List<SearchHit<User>> findByUserNameLike(String userName);
-
 
 
     @Highlight(fields = {

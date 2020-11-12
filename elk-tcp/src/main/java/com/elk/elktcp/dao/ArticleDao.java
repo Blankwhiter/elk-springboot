@@ -1,6 +1,6 @@
 package com.elk.elktcp.dao;
 
-import com.elk.elktcp.entity.Log;
+import com.elk.elktcp.entity.Article;
 import org.springframework.data.elasticsearch.annotations.Highlight;
 import org.springframework.data.elasticsearch.annotations.HighlightField;
 import org.springframework.data.elasticsearch.annotations.HighlightParameters;
@@ -9,23 +9,22 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 import java.util.List;
 
-public interface LogDao extends ElasticsearchRepository<Log, Long> {
+public interface ArticleDao extends ElasticsearchRepository<Article, Long> {
 
-    /**
-     * 设置高亮，HighlightParameters自定义高亮参数
-     *
-     * @param methodName
-     * @return
-     */
     @Highlight(fields = {
-            @HighlightField(name = "methodName", parameters = @HighlightParameters(
+            @HighlightField(name = "name", parameters = @HighlightParameters(
                     preTags = "<strong>",
                     postTags = "</strong>",
+                    fragmentSize = 500,
+                    numberOfFragments = 3)),
+            @HighlightField(name = "text", parameters = @HighlightParameters(
+                    preTags = "<span>",
+                    postTags = "</span>",
                     fragmentSize = 500,
                     numberOfFragments = 3))
 
     })
-    List<SearchHit<Log>> findByMethodNameLike(String methodName);
+    List<SearchHit<Article>> findAllByNameLikeOrTextLike(String name, String text);
 
 
 }
